@@ -38,6 +38,7 @@ posts = driver.find_elements_by_class_name("update-components-text")
 
 
 for post in posts:
+    print(post.text)
     cur.execute("INSERT INTO post(title) VALUES("
                 f"""'{post.text.replace("'", "").replace('"', "")}');"""
     )
@@ -46,14 +47,14 @@ while True:
     new_posts = driver.find_elements_by_class_name("update-components-text")
     for new_post in new_posts:
         if new_post not in posts:
+            print(new_post.text)
             cur.execute(
                 "INSERT INTO post(title) VALUES("
                 f"""'{new_post.text.replace("'", "").replace('"', "")}');""" 
             )
             con.commit()
             posts.append(new_post)
-    print(f"Time eleapsed : {datetime.now()-start}")
-    if datetime.now()-start > timedelta(seconds=60) :
+    if datetime.now()-start > timedelta(minutes=5) :
         break
     driver.scroll_to_end_of_page()
 
